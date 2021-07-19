@@ -1,7 +1,7 @@
 import torch.nn.functional as F
 import torch
 import torch.nn as nn
-from pytorch_toolbox.network_base import NetworkBase
+from pytorch_toolbox.pytorch_toolbox.network_base import NetworkBase
 
 
 class Fire(nn.Module):
@@ -27,7 +27,7 @@ class Fire(nn.Module):
         return x
 
 
-class DeepTrackNet(NetworkBase):
+class DeepTrackNet(NetworkBase):  # Network for frame
     def __init__(self, image_size=150):
         super(DeepTrackNet, self).__init__()
 

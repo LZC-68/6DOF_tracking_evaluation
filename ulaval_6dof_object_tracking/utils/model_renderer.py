@@ -31,7 +31,7 @@ class ModelRenderer(app.Canvas):
 
         model_3d = PlyParser(model_path)
 
-        #gloo.gl.use_gl('gl2 debug')
+        # gloo.gl.use_gl('gl2 debug')
 
         self.window_sizes = window_sizes
         self.camera = camera
@@ -43,14 +43,15 @@ class ModelRenderer(app.Canvas):
         vertices = model_3d.get_vertex()
         faces = model_3d.get_faces()
         self.data = np.ones(vertices.shape[0], [('a_position', np.float32, 3),
-                                           ('a_color', np.float32, 3),
-                                           ('a_normal', np.float32, 3),
-                                           ('a_ambiant_occlusion', np.float32, 3),
-                                           ('a_texcoords', np.float32, 2)])
-        self.data['a_position'] = vertices
-        self.data['a_color'] = model_3d.get_vertex_color()
+                                                ('a_color', np.float32, 3),
+                                                ('a_normal', np.float32, 3),
+                                                ('a_ambiant_occlusion', np.float32, 3),
+                                                ('a_texcoords', np.float32, 2)])
+        self.data['a_position'] = vertices[:, 0:3]
+        self.data['a_color'] = model_3d.get_vertex_color()[:, 24:27]
         self.data['a_color'] /= 255.
-        self.data['a_normal'] = model_3d.get_vertex_normals()
+        # self.data['a_normal'] = model_3d.get_vertex_normals()[:, 3:6]
+        self.data['a_normal'] = model_3d.get_vertex()[:, 3:6]
         self.data['a_normal'] = self.data['a_normal'] / np.linalg.norm(self.data['a_normal'], axis=1)[:, np.newaxis]
 
         # set white texture by default
@@ -58,8 +59,9 @@ class ModelRenderer(app.Canvas):
         texture.fill(255)
         # else load the texture from the model
         try:
-            self.data['a_texcoords'] = model_3d.get_texture_coord()
+            self.data['a_texcoords'] = model_3d.get_texture_coord()[:, 7:9]
             texture = model_3d.get_texture()
+
             if texture is not None:
                 texture = texture[::-1, :, :]
         except KeyError:
@@ -130,8 +132,8 @@ class ModelRenderer(app.Canvas):
         fbo = self.fbos[fbo_index]
         with fbo:
             gloo.set_state(depth_test=True)
-            #gl.glEnable(gl.GL_LINE_SMOOTH)
-            #gl.glHint(gl.GL_LINE_SMOOTH_HINT, gl.GL_NICEST)
+            # gl.glEnable(gl.GL_LINE_SMOOTH)
+            # gl.glHint(gl.GL_LINE_SMOOTH_HINT, gl.GL_NICEST)
             gloo.set_cull_face('back')  # Back-facing polygons will be culled
             gloo.clear(color=True, depth=True)
             gloo.set_viewport(0, 0, *size)

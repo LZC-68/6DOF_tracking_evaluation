@@ -7,8 +7,8 @@ import cv2
 import numpy as np
 import os
 
-from ulaval_6dof_object_tracking.utils.model_renderer import ModelRenderer
-from ulaval_6dof_object_tracking.utils.sequence_loader import SequenceLoader
+from utils.model_renderer import ModelRenderer
+from utils.sequence_loader import SequenceLoader
 
 GREEN_HUE = 120 / 2
 RED_HUE = 230 / 2
@@ -50,20 +50,24 @@ def image_blend_gray(foreground, background):
 
 if __name__ == '__main__':
 
+    import argparse
+
     parser = argparse.ArgumentParser(description='Show sequence')
-    parser.add_argument('-r', '--root', help="root path", action="store", default="../sample")
-    parser.add_argument('-s', '--sequence',
+
+    parser.add_argument('-r', '--root', type=str, help="root path", action="store", default="../ulaval_6dof_object_tracking/sample")
+
+    parser.add_argument('-s', '--sequence', default="interaction_hard",
                         help="Available sequences : \n"
                              "stability_near_[1-4], stability_far_[1-4], stability_occluded_[1-4]\n"
                              "occlusion_0, occlusion_[h/v]_[15/30/45/60/75]\n"
                              "interaction_translation, interaction_rotation, interaction_full, interaction_hard",
-                        action="store", required=True)
+                        action="store", required=False)
     parser.add_argument('-o', '--object',
                         help="Available objects :"
                              " clock, cookiejar, dog, dragon, kinect, lego, shoe, skull, turtle, walkman, wateringcan",
-                        action="store", required=True)
+                        action="store", required=False, default='clock')
 
-    arguments = parser.parse_args()
+    arguments = parser.parse_args([])
     root_path = arguments.root
     sequence_name = arguments.sequence
     object_name = arguments.object

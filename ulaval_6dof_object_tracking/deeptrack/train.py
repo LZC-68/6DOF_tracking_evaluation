@@ -3,14 +3,14 @@ import os
 from multiprocessing import cpu_count
 import argparse
 
-from pytorch_toolbox.train_loop import TrainLoop
+from pytorch_toolbox.pytorch_toolbox.train_loop import TrainLoop
 import torch
 from torch import optim
 from torch.utils import data
 import numpy as np
 
-from pytorch_toolbox.io import yaml_dump
-from pytorch_toolbox.transformations.compose import Compose
+from pytorch_toolbox.pytorch_toolbox.io import yaml_dump
+from pytorch_toolbox.pytorch_toolbox.transformations.compose import Compose
 
 from ulaval_6dof_object_tracking.deeptrack.data_augmentation import Occluder, HSVNoise, Background, GaussianNoise, \
     GaussianBlur, DepthDownsample, OffsetDepth, NormalizeChannels, ToTensor, ChannelHide
